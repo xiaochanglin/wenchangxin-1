@@ -1,0 +1,6 @@
+{
+  "name": "文昌文旅助手",
+  "description": "海南文昌文旅专属AI问答与伴游平台，提供智能规划与咨询服务。",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

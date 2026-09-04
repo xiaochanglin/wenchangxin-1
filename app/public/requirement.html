@@ -1,0 +1,645 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>海南文昌文旅智能助手 - 需求确认</title>
+    <meta name="doc-type" content="requirement-confirm">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Noto+Serif+SC:wght@400;600;700&display=swap');
+
+        body {
+            font-family: 'Noto Serif SC', 'Songti SC', 'STSong', serif;
+            background-color: #f7f5f0;
+            color: #2c3e50;
+        }
+        .hero-pattern {
+            background-image: linear-gradient(to right bottom, #7dd3fc, #38bdf8, #0ea5e9, #0284c7, #0369a1);
+        }
+        .accent-main { color: #0369a1; }
+        .bg-accent-main { background-color: #0369a1; }
+        .border-accent-main { border-color: #0369a1; }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.08);
+        }
+        .chapter-heading {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            margin-bottom: 1.5rem;
+        }
+        .chapter-num {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #0369a1;
+            flex-shrink: 0;
+            min-width: 2rem;
+        }
+        .chapter-title {
+            font-size: 1.5rem;
+            font-weight: 700;
+            color: #1e293b;
+            letter-spacing: 0.05em;
+            margin: 0;
+        }
+        .section-heading {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            margin-top: 1.25rem;
+            margin-bottom: 0.75rem;
+        }
+        .section-num {
+            font-weight: 600;
+            color: #0369a1;
+            flex-shrink: 0;
+        }
+        .section-title {
+            font-size: 1.125rem;
+            font-weight: 600;
+            color: #334155;
+            margin: 0;
+        }
+        .subsection-heading {
+            display: flex;
+            align-items: baseline;
+            gap: 0.5rem;
+            margin-top: 1rem;
+            margin-bottom: 0.5rem;
+        }
+        .subsection-num {
+            font-weight: 600;
+            color: #64748b;
+            font-size: 0.95rem;
+        }
+        .subsection-title {
+            font-size: 1rem;
+            font-weight: 600;
+            color: #475569;
+            margin: 0;
+        }
+        .pdf-section-appendix .chapter-num {
+            font-size: 1.25rem;
+            min-width: auto;
+        }
+        .demo-web-container {
+            width: 100%;
+            max-width: 800px;
+            height: 600px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1), 0 10px 10px -5px rgba(0, 0, 0, 0.04);
+            background-color: #ffffff;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+        .demo-web-header {
+            background-color: #f1f5f9;
+            border-bottom: 1px solid #cbd5e1;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            padding: 0 16px;
+        }
+        .demo-web-controls { display: flex; gap: 6px; }
+        .demo-web-controls span {
+            width: 12px;
+            height: 12px;
+            border-radius: 50%;
+            background-color: #cbd5e1;
+        }
+        .demo-web-controls span:nth-child(1) { background-color: #ef4444; }
+        .demo-web-controls span:nth-child(2) { background-color: #f59e0b; }
+        .demo-web-controls span:nth-child(3) { background-color: #22c55e; }
+        .demo-web-title {
+            flex: 1;
+            text-align: center;
+            font-family: sans-serif;
+            font-size: 13px;
+            color: #64748b;
+            margin-right: 42px;
+        }
+        .demo-iframe, .full-demo-iframe {
+            width: 100%;
+            border: none;
+            display: block;
+        }
+        .demo-iframe { flex: 1; }
+        .full-demo-iframe { height: 100%; }
+        @media (max-width: 768px) {
+            .demo-web-container { height: 80vh; }
+        }
+        .view-hidden { display: none !important; }
+        @media print {
+            #top-bar, #view-prototype, #download-pdf-btn, .screen-only { display: none !important; }
+        }
+        #pdf-generating-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(255, 255, 255, 0.92);
+            z-index: 99999;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            color: #334155;
+        }
+        #pdf-generating-overlay.active { display: flex; }
+        .pdf-section { break-inside: avoid; page-break-inside: avoid; }
+        .html2pdf__page-break { page-break-before: always; break-before: page; height: 0; }
+
+    </style>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+</head>
+<body class="antialiased min-h-screen flex flex-col has-demo">
+
+    <header id="top-bar" class="bg-slate-800 text-white px-4 py-3 flex justify-between items-center z-50 shadow-md shrink-0">
+        <div id="bar-title" class="font-medium flex items-center space-x-2 text-sm sm:text-base">
+            <span class="text-xl">📄</span>
+            <span>需求确认与讨论阶段</span>
+        </div>
+        <div class="flex items-center gap-2">
+            <button id="download-pdf-btn" type="button"
+                class="bg-emerald-600 hover:bg-emerald-500 text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg transition-colors font-medium flex-shrink-0">
+                一键下载 PDF
+            </button>
+            <button id="toggle-btn" type="button"
+                class="bg-blue-600 hover:bg-blue-500 text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg transition-colors font-medium flex-shrink-0">
+                切换至：应用原型演示 👉
+            </button>
+        </div>
+    </header>
+
+    <div id="view-document" class="flex-1 py-10 px-4 sm:px-6">
+        <div class="max-w-4xl mx-auto glass-card shadow-xl rounded-sm overflow-hidden">
+            <div class="hero-pattern p-12 lg:p-16 text-center text-white relative flex flex-col items-center justify-center">
+                <h1 class="text-4xl sm:text-5xl font-bold mb-6 tracking-[0.15em] relative z-10 leading-snug">
+                    关于海南文昌文旅智能助手项目<br class="sm:hidden">应用需求确认书
+                </h1>
+                <p class="text-xl sm:text-2xl font-light tracking-[0.2em] text-[#f0f9ff] relative z-10">
+                    数字化文旅导览交互系统
+                </p>
+            </div>
+            <div class="p-8 sm:p-14 lg:p-20 space-y-16">
+
+                <section class="pdf-section" data-chapter="1">
+                    <div class="chapter-heading">
+                        <span class="chapter-num">1.</span>
+                        <h2 class="chapter-title">项目概述</h2>
+                    </div>
+
+                    <div class="section-heading">
+                        <span class="section-num">1.1</span>
+                        <h3 class="section-title">建设背景</h3>
+                    </div>
+                    <p class="text-lg leading-loose text-slate-700 text-justify">
+                        为全面贯彻落实数字化文旅建设精神，推动智慧文旅服务的深度融合，提升文昌旅游的高质量服务体验。本项目基于文昌的景点、航天、文化等数据，搭建文昌文旅专属旅游智能体。
+                    </p>
+
+                    <div class="section-heading">
+                        <span class="section-num">1.2</span>
+                        <h3 class="section-title">建设目标</h3>
+                    </div>
+                    <p class="text-lg leading-loose text-slate-700 text-justify">
+                        应用以拟人化数字 IP 为核心服务载体，以轻量化手段提升文昌城市旅游的科技化与现代化形象。系统主要运行于移动端智能终端，打造全天候、高精度的智慧文旅导览服务能力。
+                    </p>
+
+                    <div class="section-heading">
+                        <span class="section-num">1.3</span>
+                        <h3 class="section-title">服务对象</h3>
+                    </div>
+                    <p class="text-lg leading-loose text-slate-700 text-justify">
+                        面向国内外来文昌旅游、观礼及文化探访的游客群体，提供全天候、高精度的在线咨询与导览服务，满足行前规划、行中导览与行后回顾等多元信息诉求。
+                    </p>
+                </section>
+
+                <div class="html2pdf__page-break"></div>
+                <section class="pdf-section" data-chapter="2">
+                    <div class="chapter-heading">
+                        <span class="chapter-num">2.</span>
+                        <h2 class="chapter-title">需求范围与功能规划</h2>
+                    </div>
+
+                    <div class="section-heading">
+                        <span class="section-num">2.1</span>
+                        <h3 class="section-title">功能范围</h3>
+                    </div>
+                    <p class="text-slate-700 mb-6 text-lg leading-loose text-justify">
+                        本系统重点建设三个维度的垂直知识问答能力，以精准响应游客的信息诉求，覆盖导览规划、航天科普与地方文旅推荐等核心场景。
+                    </p>
+
+                    <div class="section-heading">
+                        <span class="section-num">2.2</span>
+                        <h3 class="section-title">核心能力模块</h3>
+                    </div>
+                    <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                        <div class="border-t border-accent-main pt-6">
+                            <div class="subsection-heading">
+                                <span class="subsection-num">2.2.1</span>
+                                <h4 class="subsection-title">智能导览服务</h4>
+                            </div>
+                            <p class="text-slate-700 leading-relaxed text-sm text-justify">
+                                系统应具备自动化路线规划与景点深度讲解等核心功能。针对短期及长途来访游客，能够即刻输出如"两日游经典路线"等结构化旅游执行方案。
+                            </p>
+                        </div>
+                        <div class="border-t border-accent-main pt-6">
+                            <div class="subsection-heading">
+                                <span class="subsection-num">2.2.2</span>
+                                <h4 class="subsection-title">航天专项科普</h4>
+                            </div>
+                            <p class="text-slate-700 leading-relaxed text-sm text-justify">
+                                依托文昌建设国家航天发射中心的特殊优势战略定位，系统深度融入航天专项知识及数据。可自动解答火箭发射场周边观测指南、航天器基础型号科普及当地航天活动日历等专业问题。
+                            </p>
+                        </div>
+                        <div class="border-t border-accent-main pt-6">
+                            <div class="subsection-heading">
+                                <span class="subsection-num">2.2.3</span>
+                                <h4 class="subsection-title">文旅推荐</h4>
+                            </div>
+                            <p class="text-slate-700 leading-relaxed text-sm text-justify">
+                                结合地方风物特色，为游客提供地道的餐饮（如文昌鸡、抱罗粉）、商圈街区（如文南骑楼老街）及特色文旅住宿等实用信息参考，实现数字化文旅推荐。
+                            </p>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="html2pdf__page-break"></div>
+                <section class="pdf-section" data-chapter="3">
+                    <div class="chapter-heading">
+                        <span class="chapter-num">3.</span>
+                        <h2 class="chapter-title">界面交互与体验要求</h2>
+                    </div>
+
+                    <div class="section-heading">
+                        <span class="section-num">3.1</span>
+                        <h3 class="section-title">IP 形象与命名</h3>
+                    </div>
+                    <div class="bg-sky-50 border border-sky-100 p-8 sm:p-10 rounded-sm mb-6">
+                        <div class="flex flex-col sm:flex-row items-center sm:items-start gap-6 border-b border-sky-100 pb-6 mb-6">
+                            <div class="w-24 h-24 sm:w-32 sm:h-32 rounded-full overflow-hidden border-4 border-sky-200 shrink-0 bg-white shadow-sm">
+                                <img src="航小昌.png" alt="推荐IP形象" crossorigin="anonymous" class="w-full h-full object-cover">
+                            </div>
+                            <div class="flex-1 text-slate-700 leading-relaxed text-justify mt-4 sm:mt-0">
+                                <p class="mb-3">为赋予智能助手更生动的人格特化，目前设计了初步的视觉形象（如左侧图示），并提供以下体现"文昌+航天"主题特色的 IP 命名备选方案供定夺：</p>
+                                <div class="bg-white p-3 rounded border border-sky-100 flex flex-wrap gap-3 font-bold text-sky-800 mb-3">
+                                    <span class="bg-sky-50 px-3 py-1 rounded shadow-sm border border-sky-100">航小昌</span>
+                                    <span class="bg-sky-50 px-3 py-1 rounded shadow-sm border border-sky-100">文小箭</span>
+                                    <span class="bg-sky-50 px-3 py-1 rounded shadow-sm border border-sky-100">文小航</span>
+                                    <span class="bg-sky-50 px-3 py-1 rounded shadow-sm border border-sky-100">航昌昌</span>
+                                </div>
+                                <p class="text-sm border-l-4 border-accent-main pl-3">以"航小昌"为例，其拟人化设定为：热情好客、精通航天科学并熟稔本地风物底蕴的智慧政务及文旅向导。</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="section-heading">
+                        <span class="section-num">3.2</span>
+                        <h3 class="section-title">UI 视觉规范</h3>
+                    </div>
+                    <p class="text-slate-700 leading-relaxed text-justify">
+                        H5 前端页面采用沉浸式全屏流式交互布局。视觉体系中融合椰林海岛风情与航天文化元素。为兼顾适老化及通用性易用需求，首屏输入区域设置常驻引导式预置词卡片（快捷提问按钮），确保各年龄层群体的政务级无障碍操作体验。
+                    </p>
+                </section>
+
+                <div class="html2pdf__page-break"></div>
+                <section class="pdf-section" data-chapter="4">
+                    <div class="chapter-heading">
+                        <span class="chapter-num">4.</span>
+                        <h2 class="chapter-title">原型演示与确认事项</h2>
+                    </div>
+
+                    <div class="section-heading">
+                        <span class="section-num">4.1</span>
+                        <h3 class="section-title">待确认清单</h3>
+                    </div>
+                    <p class="text-slate-700 mb-4 text-lg leading-loose text-justify">
+                        请结合下方原型演示，对以下事项进行确认或提出修改意见：
+                    </p>
+                    <ul class="list-disc list-inside text-slate-700 space-y-2 mb-6 text-justify pl-2">
+                        <li>核心功能模块（智能导览、航天科普、文旅推荐）的范围与优先级是否满足业务需求；</li>
+                        <li>IP 形象视觉方案及命名（航小昌 / 文小箭 / 文小航 / 航昌昌）的最终选定；</li>
+                        <li>UI 视觉风格、交互布局及快捷提问引导是否符合预期；</li>
+                        <li>原型演示中的问答效果、响应速度与内容准确度是否达到可交付标准。</li>
+                    </ul>
+
+                    <div class="demo-block mt-8">
+                        <p class="text-slate-600 mb-4 text-lg text-justify">
+                            以下是部分功能的 Demo 演示，可直观体验系统初步的智能问答交互效果。若当前页面加载出错，您也可以
+                            <a href="https://xiaochanglin.github.io/test--Wenchang--travel/" target="_blank" rel="noopener noreferrer" class="text-sky-600 underline font-medium hover:text-sky-800">直接访问演示链接</a>
+                            进行体验。
+                        </p>
+                        <div class="bg-sky-50 border border-sky-200 text-sky-800 px-5 py-4 rounded-md mb-8 flex items-start gap-3 shadow-sm">
+                            <svg class="h-6 w-6 text-sky-500 shrink-0 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                            <div class="text-[15px] leading-relaxed">
+                                <strong class="font-bold">【访问提示】</strong> 当前演示环境为内部联调测试版本，尚未正式发布。如在下方加载过程中出现环境安全或拦截提示，属于内部演示环境的正常机制，请您放心点击<strong>【确定访问】</strong>直接安全进入体验。
+                            </div>
+                        </div>
+                        <p class="text-slate-500 mb-6 text-center tracking-[0.4em] text-sm uppercase font-bold">— D E M O 演 示 （Web 版） —</p>
+                        <div class="flex justify-center screen-only">
+                            <div class="demo-web-container">
+                                <div class="demo-web-header">
+                                    <div class="demo-web-controls"><span></span><span></span><span></span></div>
+                                    <div class="demo-web-title">航小昌智能导览 - Demo演示</div>
+                                </div>
+                                <iframe id="inline-demo-iframe" class="demo-iframe" loading="lazy" src="about:blank" data-src="https://xiaochanglin.github.io/test--Wenchang--travel/" title="航小昌文旅助手演示"></iframe>
+                            </div>
+                        </div>
+                        <div id="pdf-demo-static" class="hidden pdf-only-demo">
+                            <div class="flex justify-center">
+                                <div class="demo-web-container" style="height:auto;">
+                                    <div class="demo-web-header">
+                                        <div class="demo-web-controls"><span></span><span></span><span></span></div>
+                                        <div class="demo-web-title">航小昌智能导览 - Demo演示（静态预览）</div>
+                                    </div>
+                                    <a href="https://xiaochanglin.github.io/test--Wenchang--travel/" class="pdf-demo-link block">
+                                        <img src="demo-screenshot.png" alt="问答页面演示截图" crossorigin="anonymous" class="w-full block">
+                                    </a>
+                                </div>
+                            </div>
+                            <p class="text-center mt-4 text-sm text-slate-600">
+                                点击上图或下方链接，访问在线交互演示：<br>
+                                <a href="https://xiaochanglin.github.io/test--Wenchang--travel/" class="text-sky-600 underline break-all">https://xiaochanglin.github.io/test--Wenchang--travel/</a>
+                            </p>
+                        </div>
+                        <p class="text-center mt-4 text-sm text-slate-500 screen-only">
+                            若 Demo 无法加载（503），说明演示服务正在冷启动，请
+                            <a href="https://xiaochanglin.github.io/test--Wenchang--travel/" target="_blank" rel="noopener noreferrer" class="text-sky-600 underline font-medium">点击新窗口打开</a>
+                            或等待 30 秒后
+                            <button type="button" onclick="document.getElementById('inline-demo-iframe').src = document.getElementById('inline-demo-iframe').dataset.src + '?t=' + Date.now()" class="text-sky-600 underline font-medium">重新加载</button>
+                        </p>
+                    </div>
+                </section>
+
+            </div>
+        </div>
+        <div class="text-center mt-12 mb-8 text-[10px] text-slate-400 tracking-[0.3em] uppercase">
+            Powered by DeepSeek & Hainan Wenchang Culture
+        </div>
+    </div>
+
+    <div id="pdf-generating-overlay">正在生成 PDF，请稍候...</div>
+
+    <div id="view-prototype" class="view-hidden flex-1 flex flex-col bg-gray-900 min-h-0 relative">
+        <iframe id="full-demo-iframe" class="full-demo-iframe flex-1" src="about:blank" title="航小昌智能导览全屏演示"></iframe>
+        <div id="prototype-hint" class="absolute bottom-0 left-0 right-0 bg-slate-800/95 text-white px-4 py-3 flex flex-col sm:flex-row items-center justify-between gap-3 text-sm border-t border-slate-700">
+            <span class="text-slate-300 text-center sm:text-left">演示服务长时间未访问时会自动休眠，首次打开可能需要约 30 秒启动。若页面显示 503，请稍等后重新加载或新窗口打开。</span>
+            <div class="flex gap-2 shrink-0">
+                <button type="button" onclick="reloadDemo()" class="bg-slate-600 hover:bg-slate-500 px-4 py-1.5 rounded-lg transition-colors">重新加载</button>
+                <a href="https://xiaochanglin.github.io/test--Wenchang--travel/" target="_blank" rel="noopener noreferrer" class="bg-blue-600 hover:bg-blue-500 px-4 py-1.5 rounded-lg transition-colors">新窗口打开</a>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        const DEMO_URL = 'https://xiaochanglin.github.io/test--Wenchang--travel/';
+        let currentView = 'document';
+
+        const barTitle = document.getElementById('bar-title');
+        const toggleBtn = document.getElementById('toggle-btn');
+        const viewDocument = document.getElementById('view-document');
+        const viewPrototype = document.getElementById('view-prototype');
+        const fullDemoIframe = document.getElementById('full-demo-iframe');
+
+        function loadDemoIframe() {
+            if (fullDemoIframe) fullDemoIframe.src = DEMO_URL + '?t=' + Date.now();
+        }
+
+        function reloadDemo() { loadDemoIframe(); }
+
+        function switchToDocument() {
+            currentView = 'document';
+            viewDocument.classList.remove('view-hidden');
+            if (viewPrototype) viewPrototype.classList.add('view-hidden');
+            barTitle.innerHTML = '<span class="text-xl">📄</span><span>需求确认与讨论阶段</span>';
+            if (toggleBtn) {
+                toggleBtn.textContent = '切换至：应用原型演示 👉';
+                toggleBtn.className = 'bg-blue-600 hover:bg-blue-500 text-xs sm:text-sm px-3 sm:px-4 py-2 rounded-lg transition-colors font-medium flex-shrink-0';
+            }
+            document.body.style.overflow = '';
+        }
+
+        function switchToPrototype() {
+            currentView = 'prototype';
+            viewDocument.classList.add('view-hidden');
+            if (viewPrototype) viewPrototype.classList.remove('view-hidden');
+            barTitle.innerHTML = '<span class="text-xl">✨</span><span>交互原型演示区</span>';
+            if (toggleBtn) {
+                toggleBtn.textContent = '👈 返回需求确认书';
+                toggleBtn.className = 'bg-slate-700 hover:bg-slate-600 border border-slate-600 text-xs sm:text-sm px-3 sm:px-4 py-1.5 rounded-lg transition-colors font-medium flex-shrink-0';
+            }
+            loadDemoIframe();
+            document.body.style.overflow = 'hidden';
+        }
+
+        if (toggleBtn) {
+            toggleBtn.addEventListener('click', () => {
+                if (currentView === 'document') switchToPrototype();
+                else switchToDocument();
+            });
+        }
+
+        const inlineIframe = document.getElementById('inline-demo-iframe');
+        if (inlineIframe && 'IntersectionObserver' in window) {
+            const observer = new IntersectionObserver((entries) => {
+                entries.forEach(entry => {
+                    if (entry.isIntersecting && inlineIframe.src === 'about:blank') {
+                        inlineIframe.src = inlineIframe.dataset.src + '?t=' + Date.now();
+                        observer.disconnect();
+                    }
+                });
+            }, { rootMargin: '100px' });
+            observer.observe(inlineIframe);
+        } else if (inlineIframe) {
+            inlineIframe.src = inlineIframe.dataset.src;
+        }
+
+        const PDF_FILENAME = '海南文昌文旅智能助手-需求确认书.pdf';
+
+        function collectLinkRects(container) {
+            return [...container.querySelectorAll('a[href]')].map(a => {
+                let el = a, x = 0, y = 0;
+                while (el && el !== container) {
+                    x += el.offsetLeft;
+                    y += el.offsetTop;
+                    el = el.offsetParent;
+                }
+                return { url: a.href, x, y, w: a.offsetWidth, h: a.offsetHeight };
+            }).filter(l => l.w > 0 && l.h > 0);
+        }
+
+        function waitForImages(container) {
+            return Promise.all([...container.querySelectorAll('img')].map(img => {
+                if (img.complete && img.naturalWidth > 0) return Promise.resolve();
+                return new Promise(resolve => { img.onload = resolve; img.onerror = resolve; });
+            }));
+        }
+
+        function addLinksToPdf(pdf, linkData, containerWidth, marginMm, contentHeightMm) {
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const innerWidth = pageWidth - marginMm * 2;
+            const pxScale = innerWidth / containerWidth;
+            linkData.forEach(link => {
+                const scaledY = link.y * pxScale;
+                const page = Math.min(Math.max(Math.floor(scaledY / contentHeightMm) + 1, 1), pdf.internal.getNumberOfPages());
+                pdf.setPage(page);
+                pdf.link(marginMm + link.x * pxScale, marginMm + (scaledY - (page - 1) * contentHeightMm), link.w * pxScale, link.h * pxScale, { url: link.url });
+            });
+        }
+
+        function appendCanvasToPdf(pdf, canvas, marginMm, startOnNewPage) {
+            const pageWidth = pdf.internal.pageSize.getWidth();
+            const pageHeight = pdf.internal.pageSize.getHeight();
+            const contentWidth = pageWidth - marginMm * 2;
+            const contentHeight = pageHeight - marginMm * 2;
+            const scale = contentWidth / canvas.width;
+            const sliceHeightPx = contentHeight / scale;
+            let offsetY = 0, sliceIndex = 0;
+            if (startOnNewPage && pdf.internal.getNumberOfPages() > 0) pdf.addPage();
+            while (offsetY < canvas.height) {
+                if (sliceIndex > 0) pdf.addPage();
+                const currentSlicePx = Math.min(sliceHeightPx, canvas.height - offsetY);
+                const sliceCanvas = document.createElement('canvas');
+                sliceCanvas.width = canvas.width;
+                sliceCanvas.height = currentSlicePx;
+                sliceCanvas.getContext('2d').drawImage(canvas, 0, offsetY, canvas.width, currentSlicePx, 0, 0, canvas.width, currentSlicePx);
+                pdf.addImage(sliceCanvas.toDataURL('image/jpeg', 0.92), 'JPEG', marginMm, marginMm, contentWidth, currentSlicePx * scale);
+                offsetY += currentSlicePx;
+                sliceIndex++;
+            }
+            return contentHeight;
+        }
+
+        async function captureBlock(block, canvasOpts) {
+            return html2pdf().set({ html2canvas: canvasOpts }).from(block).toCanvas().get('canvas');
+        }
+
+        function stripExternalBackgrounds(root) {
+            root.querySelectorAll('*').forEach(el => {
+                const bg = getComputedStyle(el).backgroundImage;
+                if (bg && bg !== 'none' && (bg.includes('http://') || bg.includes('https://')) && !bg.includes(window.location.origin)) {
+                    el.style.backgroundImage = 'none';
+                }
+            });
+        }
+
+        async function inlineImages(container) {
+            const backups = [];
+            for (const img of container.querySelectorAll('img')) {
+                if (!img.src || img.src.startsWith('data:')) continue;
+                backups.push({ img, src: img.src });
+                try {
+                    await new Promise((resolve, reject) => {
+                        const temp = new Image();
+                        temp.crossOrigin = 'anonymous';
+                        temp.onload = () => {
+                            const canvas = document.createElement('canvas');
+                            canvas.width = temp.naturalWidth;
+                            canvas.height = temp.naturalHeight;
+                            canvas.getContext('2d').drawImage(temp, 0, 0);
+                            img.src = canvas.toDataURL('image/jpeg', 0.92);
+                            resolve();
+                        };
+                        temp.onerror = reject;
+                        temp.src = img.src + (img.src.includes('?') ? '&' : '?') + '_pdf=' + Date.now();
+                    });
+                } catch (e) { console.warn('图片内联失败:', img.src, e); }
+            }
+            return backups;
+        }
+
+        function restoreImages(backups) {
+            backups.forEach(({ img, src }) => { img.src = src; });
+        }
+
+        async function downloadPDF() {
+            const btn = document.getElementById('download-pdf-btn');
+            const overlay = document.getElementById('pdf-generating-overlay');
+            const source = document.querySelector('#view-document .glass-card');
+            const topBar = document.getElementById('top-bar');
+            const powered = document.querySelector('#view-document > .text-center.mt-12');
+            if (!source) return;
+
+            const screenOnlyEls = [...source.querySelectorAll('.screen-only')];
+            const pdfDemo = source.querySelector('#pdf-demo-static');
+            const hiddenEls = [];
+            let imageBackups = [];
+
+            btn.disabled = true;
+            const origText = btn.textContent;
+            btn.textContent = '正在生成 PDF...';
+            overlay.classList.add('active');
+            const scrollY = window.scrollY;
+            window.scrollTo(0, 0);
+            const origWidth = source.style.width;
+            const origMaxWidth = source.style.maxWidth;
+
+            try {
+                if (topBar) topBar.style.display = 'none';
+                screenOnlyEls.forEach(el => { el.style.display = 'none'; hiddenEls.push(el); });
+                if (pdfDemo) pdfDemo.classList.remove('hidden');
+                source.querySelectorAll('iframe, button').forEach(el => { el.style.display = 'none'; hiddenEls.push(el); });
+                if (powered) powered.style.display = 'none';
+                stripExternalBackgrounds(source);
+                source.style.width = '794px';
+                source.style.maxWidth = '794px';
+                await waitForImages(source);
+                imageBackups = await inlineImages(source);
+                await new Promise(r => setTimeout(r, 300));
+
+                const linkData = collectLinkRects(source);
+                const marginMm = 10;
+                const containerWidth = source.offsetWidth || 794;
+                const canvasOpts = {
+                    scale: 2, useCORS: true, allowTaint: false, logging: false,
+                    scrollX: 0, scrollY: 0, width: 794, windowWidth: 794, backgroundColor: '#ffffff',
+                    onclone: (clonedDoc, el) => {
+                        stripExternalBackgrounds(el);
+                        el.querySelectorAll('iframe, button, .screen-only, .html2pdf__page-break').forEach(n => n.remove());
+                        const demo = el.querySelector('#pdf-demo-static');
+                        if (demo) demo.classList.remove('hidden');
+                        el.style.width = '794px';
+                        el.style.maxWidth = '794px';
+                    }
+                };
+
+                const { jsPDF } = window.jspdf;
+                const pdf = new jsPDF({ unit: 'mm', format: 'a4', orientation: 'portrait' });
+                const blocks = [source.querySelector('.hero-pattern'), ...source.querySelectorAll('.pdf-section')].filter(Boolean);
+                let contentHeight = pdf.internal.pageSize.getHeight() - marginMm * 2;
+                for (let i = 0; i < blocks.length; i++) {
+                    const canvas = await captureBlock(blocks[i], canvasOpts);
+                    contentHeight = appendCanvasToPdf(pdf, canvas, marginMm, i > 0);
+                }
+                if (!pdf || pdf.internal.getNumberOfPages() < 1) throw new Error('PDF 页数为 0');
+                try { addLinksToPdf(pdf, linkData, containerWidth, marginMm, contentHeight); }
+                catch (linkErr) { console.warn('超链接标注失败:', linkErr); }
+                pdf.save(PDF_FILENAME);
+            } catch (err) {
+                console.error('PDF 生成错误:', err);
+                alert('PDF 生成失败：' + (err.message || '未知错误') + '。请刷新页面后重试。');
+            } finally {
+                source.style.width = origWidth;
+                source.style.maxWidth = origMaxWidth;
+                restoreImages(imageBackups);
+                if (topBar) topBar.style.display = '';
+                hiddenEls.forEach(el => { el.style.display = ''; });
+                if (pdfDemo) pdfDemo.classList.add('hidden');
+                if (powered) powered.style.display = '';
+                overlay.classList.remove('active');
+                window.scrollTo(0, scrollY);
+                btn.disabled = false;
+                btn.textContent = origText;
+            }
+        }
+
+        document.getElementById('download-pdf-btn').addEventListener('click', downloadPDF);
+
+    </script>
+</body>
+</html>
