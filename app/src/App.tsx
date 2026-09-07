@@ -198,7 +198,7 @@ const PRODUCTS: Product[] = [
   { id: 5, name: '冷榨椰子油 250ml', emoji: '🥥', category: '椰子好物', price: 45, tag: '东郊椰林', sales: '月售600+', gradient: 'from-cyan-100 to-sky-200' },
   { id: 6, name: '速溶椰子粉 400g', emoji: '🥥', category: '椰子好物', price: 32, tag: '椰香浓郁', sales: '月售1200+', gradient: 'from-lime-100 to-green-200' },
   { id: 7, name: '长征火箭模型摆件', emoji: '🚀', category: '航天文创', price: 99, tag: '航天城限定', sales: '月售400+', gradient: 'from-blue-100 to-indigo-200' },
-  { id: 8, name: '航小昌IP公仔', emoji: '🧸', category: '航天文创', price: 59, tag: '官方正版', sales: '月售900+', gradient: 'from-violet-100 to-purple-200' },
+  { id: 8, name: '文昌星IP公仔', emoji: '🧸', category: '航天文创', price: 59, tag: '官方正版', sales: '月售900+', gradient: 'from-violet-100 to-purple-200' },
   { id: 9, name: '马鲛鱼干 500g', emoji: '🐟', category: '海鲜干货', price: 88, tag: '渔民自晒', sales: '月售500+', gradient: 'from-slate-100 to-gray-200' },
   { id: 10, name: '淡干虾皮 250g', emoji: '🦐', category: '海鲜干货', price: 39, tag: '鲜味十足', sales: '月售700+', gradient: 'from-orange-100 to-amber-200' },
 ];
@@ -217,7 +217,7 @@ export default function App() {
   const [toast, setToast] = useState('');
 
   const tourPresetAnswers: Record<string, string> = {
-    "你好": "你好！我是您的文昌旅游小助手航小昌 🌴 很高兴为您服务！无论是景点推荐、美食打卡，还是行程规划，您都可以随时问我哦！",
+    "你好": "你好！我是您的文昌旅游小助手文昌星 🌴 很高兴为您服务！无论是景点推荐、美食打卡，还是行程规划，您都可以随时问我哦！",
     "文昌必玩的景点有哪些？": `**来文昌，这些景点一定不能错过 🌴🚀**
 
 **1. 文昌航天发射场 & 航天科普中心** 🚀
@@ -333,12 +333,12 @@ export default function App() {
                 <div className="absolute inset-x-0 bottom-0 h-12 bg-gradient-to-t from-[#f2f6fc] to-transparent pointer-events-none"></div>
                 <div className="relative h-full px-5 flex items-center justify-between">
                   <div className="flex flex-col">
-                    <h1 className="text-3xl font-extrabold text-gray-800 tracking-tight drop-shadow-sm">航小昌</h1>
+                    <h1 className="text-3xl font-extrabold text-gray-800 tracking-tight drop-shadow-sm">文昌星</h1>
                     <span className="text-lg text-gray-600 font-medium mt-0.5">伴您游文昌</span>
                   </div>
                   <img
                     src={`${BASE}avatar.png`}
-                    alt="航小昌"
+                    alt="文昌星"
                     className="w-20 h-20 object-contain drop-shadow-lg"
                   />
                 </div>
@@ -385,7 +385,7 @@ export default function App() {
                     />
                     <div className="px-4 py-3.5 flex items-center justify-between">
                       <div>
-                        <div className="text-blue-600 text-sm font-semibold mb-0.5">@航小昌：</div>
+                        <div className="text-blue-600 text-sm font-semibold mb-0.5">@文昌星：</div>
                         <div className="text-gray-700 text-[15px]">{BIWAN_QUESTION}</div>
                       </div>
                       <div className="w-8 h-8 rounded-full bg-blue-50 flex items-center justify-center shrink-0 ml-3">
@@ -446,7 +446,7 @@ export default function App() {
               onChange={setInput}
               onSend={handleLandingSend}
               disabled={tour.isGenerating}
-              placeholder="给航小昌布置一个任务"
+              placeholder="给文昌星布置一个任务"
             />
           </>
         )}
@@ -461,9 +461,9 @@ export default function App() {
               >
                 <ChevronLeft className="w-6 h-6 text-gray-700" />
               </button>
-              <img src={`${BASE}avatar.png`} alt="航小昌" className="w-9 h-9 object-contain" />
+              <img src={`${BASE}avatar.png`} alt="文昌星" className="w-9 h-9 object-contain" />
               <div>
-                <div className="font-bold text-gray-800 text-[15px] leading-tight">航小昌 · 文昌问答</div>
+                <div className="font-bold text-gray-800 text-[15px] leading-tight">文昌星 · 文昌问答</div>
                 <div className="text-xs text-gray-400">景点 / 美食 / 行程，有问必答</div>
               </div>
             </div>
