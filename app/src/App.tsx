@@ -475,56 +475,53 @@ export default function App() {
                 </div>
               </div>
               <div className="pt-4">
-                {tour.messages.length === 0 && (
-                  <div className="px-4 space-y-3">
-                    {/* 标题卡 */}
-                    <div className="bg-white/85 backdrop-blur rounded-2xl shadow-sm border border-white/60 px-4 py-3.5">
-                      <div className="flex items-center space-x-1.5">
-                        <Sparkles className="w-4 h-4 text-blue-500" />
-                        <span className="text-[15px] font-bold text-gray-800">旅行规划小助手</span>
-                      </div>
-                      <div className="text-sm text-gray-400 mt-0.5">旅行规划智能体，定制您的文昌之旅</div>
+                {/* 介绍区常驻：横幅下方始终显示（不随消息有无隐藏） */}
+                <div className="px-4 space-y-3">
+                  {/* 标题卡 */}
+                  <div className="bg-white/85 backdrop-blur rounded-2xl shadow-sm border border-white/60 px-4 py-3.5">
+                    <div className="flex items-center space-x-1.5">
+                      <Sparkles className="w-4 h-4 text-blue-500" />
+                      <span className="text-[15px] font-bold text-gray-800">旅行规划小助手</span>
                     </div>
-                    {/* 文昌星介绍 */}
-                    <div className="bg-white/90 backdrop-blur rounded-3xl shadow-sm border border-white/60 px-5 py-4 text-[17px] text-gray-800 leading-relaxed">
-                      嗨，我是你的AI旅行小助手文昌星！✨ 无论你想制定行程🗺️、挖掘小众景点🌴，还是了解当地美食🍗，我都能帮你轻松搞定！需要推荐目的地、旅行贴士随时告诉我哦~😊 今天想聊点什么呢？
-                    </div>
-                    {/* 常搜问题 */}
-                    <div className="flex flex-col items-start space-y-4 pt-2">
-                      {[
-                        '文昌必玩的景点有哪些？',
-                        '文昌航天发射场怎么参观？',
-                        '文昌有哪些特色美食？',
-                      ].map((q) => (
-                        <button
-                          key={q}
-                          onClick={() => tour.send(q)}
-                          className="bg-white/90 backdrop-blur rounded-full shadow-sm border border-white/60 px-5 py-3 text-[17px] text-gray-800 hover:shadow-md active:scale-95 transition-all"
-                        >
-                          {q}
-                        </button>
-                      ))}
-                    </div>
+                    <div className="text-sm text-gray-400 mt-0.5">旅行规划智能体，定制您的文昌之旅</div>
                   </div>
-                )}
+                  {/* 文昌星介绍 */}
+                  <div className="bg-white/90 backdrop-blur rounded-3xl shadow-sm border border-white/60 px-5 py-4 text-[17px] text-gray-800 leading-relaxed">
+                    嗨，我是你的AI旅行小助手文昌星！✨ 无论你想制定行程🗺️、挖掘小众景点🌴，还是了解当地美食🍗，我都能帮你轻松搞定！需要推荐目的地、旅行贴士随时告诉我哦~😊 今天想聊点什么呢？
+                  </div>
+                  {/* 常搜问题 */}
+                  <div className="flex flex-col items-start space-y-4 pt-2">
+                    {[
+                      '文昌必玩的景点有哪些？',
+                      '文昌航天发射场怎么参观？',
+                      '文昌有哪些特色美食？',
+                    ].map((q) => (
+                      <button
+                        key={q}
+                        onClick={() => tour.send(q)}
+                        className="bg-white/90 backdrop-blur rounded-full shadow-sm border border-white/60 px-5 py-3 text-[17px] text-gray-800 hover:shadow-md active:scale-95 transition-all"
+                      >
+                        {q}
+                      </button>
+                    ))}
+                  </div>
+                </div>
                 <MessageList messages={tour.messages} isGenerating={tour.isGenerating} />
               </div>
             </div>
 
-            {/* 底部快捷标签 */}
-            {tour.messages.length === 0 && (
-              <div className="shrink-0 px-4 pb-2 flex space-x-2 overflow-x-auto">
-                {['启发我去哪', '著名景点', '风味文昌', '景区导览'].map((q) => (
-                  <button
-                    key={q}
-                    onClick={() => tour.send(q)}
-                    className="shrink-0 bg-white/85 backdrop-blur rounded-full shadow-sm border border-white/60 px-4 py-2 text-sm text-gray-700 hover:shadow-md active:scale-95 transition-all"
-                  >
-                    {q}
-                  </button>
-                ))}
-              </div>
-            )}
+            {/* 底部快捷标签（常驻） */}
+            <div className="shrink-0 px-4 pb-2 flex space-x-2 overflow-x-auto bg-[#edf2f9]">
+              {['启发我去哪', '著名景点', '风味文昌', '景区导览'].map((q) => (
+                <button
+                  key={q}
+                  onClick={() => tour.send(q)}
+                  className="shrink-0 bg-white/85 backdrop-blur rounded-full shadow-sm border border-white/60 px-4 py-2 text-sm text-gray-700 hover:shadow-md active:scale-95 transition-all"
+                >
+                  {q}
+                </button>
+              ))}
+            </div>
 
             <ChatInput
               value={input}
