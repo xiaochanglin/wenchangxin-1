@@ -13,7 +13,8 @@ import {
   Search,
   Plus,
   MapPin,
-  Star
+  Star,
+  Sparkles
 } from 'lucide-react';
 
 type Message = {
@@ -132,11 +133,11 @@ function MessageList({ messages, isGenerating }: { messages: Message[]; isGenera
               {message.content}
             </div>
           ) : (
-            <div className="bg-white border border-gray-100 px-5 py-4 rounded-2xl rounded-tl-sm max-w-[92%] shadow-sm text-gray-800 markdown-body">
+            <div className="px-2 py-1 max-w-[96%] text-gray-800 markdown-body">
               {message.content ? (
                 <ReactMarkdown>{message.content}</ReactMarkdown>
               ) : (
-                <div className="flex items-center space-x-1.5 h-6">
+                <div className="flex items-center space-x-1.5 h-6 px-2">
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.3s]"></div>
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce [animation-delay:-0.15s]"></div>
                   <div className="w-2 h-2 bg-gray-400 rounded-full animate-bounce"></div>
@@ -454,42 +455,76 @@ export default function App() {
         {/* ================= 首页 · 问答（合并到首页） ================= */}
         {tab === 'home' && homeView === 'chat' && (
           <>
-            <div className="bg-white/95 backdrop-blur border-b border-gray-100 px-3 py-3 flex items-center space-x-2 shrink-0 shadow-sm">
-              <button
-                onClick={() => setHomeView('landing')}
-                className="p-1.5 rounded-full hover:bg-gray-100 transition-colors"
-              >
-                <ChevronLeft className="w-6 h-6 text-gray-700" />
-              </button>
-              <img src={`${BASE}avatar.png`} alt="文昌星" className="w-9 h-9 object-contain" />
-              <div>
-                <div className="font-bold text-gray-800 text-[15px] leading-tight">文昌星 · 文昌问答</div>
-                <div className="text-xs text-gray-400">景点 / 美食 / 行程，有问必答</div>
+            {/* 返回钮固定浮层（不随滚动） */}
+            <button
+              onClick={() => setHomeView('landing')}
+              className="absolute top-3 left-3 z-20 w-9 h-9 rounded-full bg-white/90 shadow flex items-center justify-center hover:bg-white transition-colors"
+            >
+              <ChevronLeft className="w-6 h-6 text-gray-700" />
+            </button>
+
+            {/* 横幅+内容同一滚动流：图片随内容一起滚走，文字不会滚进图里 */}
+            <div className="flex-1 overflow-y-auto bg-[#edf2f9]">
+              <div className="relative">
+                <div className="h-[200px] overflow-hidden">
+                  <img
+                    src={`${BASE}chat-bg.png`}
+                    alt=""
+                    className="w-full h-full object-cover object-top"
+                  />
+                </div>
+              </div>
+              <div className="pt-4">
+                {tour.messages.length === 0 && (
+                  <div className="px-4 space-y-3">
+                    {/* 标题卡 */}
+                    <div className="bg-white/85 backdrop-blur rounded-2xl shadow-sm border border-white/60 px-4 py-3.5">
+                      <div className="flex items-center space-x-1.5">
+                        <Sparkles className="w-4 h-4 text-blue-500" />
+                        <span className="text-[15px] font-bold text-gray-800">旅行规划小助手</span>
+                      </div>
+                      <div className="text-sm text-gray-400 mt-0.5">旅行规划智能体，定制您的文昌之旅</div>
+                    </div>
+                    {/* 文昌星介绍 */}
+                    <div className="bg-white/90 backdrop-blur rounded-3xl shadow-sm border border-white/60 px-5 py-4 text-[17px] text-gray-800 leading-relaxed">
+                      嗨，我是你的AI旅行小助手文昌星！✨ 无论你想制定行程🗺️、挖掘小众景点🌴，还是了解当地美食🍗，我都能帮你轻松搞定！需要推荐目的地、旅行贴士随时告诉我哦~😊 今天想聊点什么呢？
+                    </div>
+                    {/* 常搜问题 */}
+                    <div className="flex flex-col items-start space-y-4 pt-2">
+                      {[
+                        '文昌必玩的景点有哪些？',
+                        '文昌航天发射场怎么参观？',
+                        '文昌有哪些特色美食？',
+                      ].map((q) => (
+                        <button
+                          key={q}
+                          onClick={() => tour.send(q)}
+                          className="bg-white/90 backdrop-blur rounded-full shadow-sm border border-white/60 px-5 py-3 text-[17px] text-gray-800 hover:shadow-md active:scale-95 transition-all"
+                        >
+                          {q}
+                        </button>
+                      ))}
+                    </div>
+                  </div>
+                )}
+                <MessageList messages={tour.messages} isGenerating={tour.isGenerating} />
               </div>
             </div>
 
-            <div className="flex-1 overflow-y-auto">
-              {tour.messages.length === 0 && (
-                <div className="px-4 pt-4">
-                  <div className="bg-white rounded-2xl shadow-sm border border-gray-100 p-4">
-                    <h2 className="text-base font-bold text-gray-800 mb-2">其他人都这样问我</h2>
-                    <ul className="text-sm rounded-xl overflow-hidden border border-gray-100">
-                      {suggestedQuestions.map((q, idx) => (
-                        <li
-                          key={idx}
-                          className="flex text-gray-800 py-2.5 border-b border-gray-100 last:border-0 hover:bg-blue-50/50 cursor-pointer transition-colors px-3"
-                          onClick={() => tour.send(q)}
-                        >
-                          <span className="w-6 text-blue-600/80 font-mono font-medium">{idx + 1}</span>
-                          <span className="flex-1 font-medium">{q}</span>
-                        </li>
-                      ))}
-                    </ul>
-                  </div>
-                </div>
-              )}
-              <MessageList messages={tour.messages} isGenerating={tour.isGenerating} />
-            </div>
+            {/* 底部快捷标签 */}
+            {tour.messages.length === 0 && (
+              <div className="shrink-0 px-4 pb-2 flex space-x-2 overflow-x-auto">
+                {['启发我去哪', '著名景点', '风味文昌', '景区导览'].map((q) => (
+                  <button
+                    key={q}
+                    onClick={() => tour.send(q)}
+                    className="shrink-0 bg-white/85 backdrop-blur rounded-full shadow-sm border border-white/60 px-4 py-2 text-sm text-gray-700 hover:shadow-md active:scale-95 transition-all"
+                  >
+                    {q}
+                  </button>
+                ))}
+              </div>
+            )}
 
             <ChatInput
               value={input}
