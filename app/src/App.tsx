@@ -619,13 +619,13 @@ export default function App() {
           </>
         )}
 
-        {/* ================= 优选商城 ================= */}
+        {/* ================= 旅购商城 ================= */}
         {tab === 'mall' && (
           <>
             <div className="bg-white/95 backdrop-blur border-b border-gray-100 px-4 pt-5 pb-3 shrink-0 shadow-sm">
               <div className="flex items-center justify-between mb-3">
                 <div>
-                  <h1 className="text-2xl font-extrabold text-gray-800">优选商城</h1>
+                  <h1 className="text-2xl font-extrabold text-gray-800">旅购商城</h1>
                   <div className="text-xs text-gray-400 mt-0.5">文昌供应链直供 · 产地好货</div>
                 </div>
                 <button className="relative p-2.5 bg-blue-50 rounded-full">
@@ -717,7 +717,7 @@ export default function App() {
               className={`flex flex-col items-center space-y-0.5 transition-colors ${tab === 'mall' ? 'text-blue-600' : 'text-gray-400'}`}
             >
               <ShoppingBag className="w-6 h-6" />
-              <span className="text-[11px] font-bold">优选</span>
+              <span className="text-[11px] font-bold">旅购</span>
             </button>
           </div>
         )}
